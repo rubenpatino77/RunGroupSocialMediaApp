@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 
@@ -6,6 +7,8 @@ namespace RunGroupSocialMedia.Models
 {
 	public class AppUser
 	{
+        [Key]
+        public string id { get; set; }
         public int? Pace { get; set; }
         public int? Mileage { get; set; }
         public string? ProfileImageUrl { get; set; }

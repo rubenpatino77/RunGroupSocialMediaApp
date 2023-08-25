@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RunGroupSocialMedia.Data.Enum;
 
 namespace RunGroupSocialMedia.Models
 {
