@@ -9,10 +9,14 @@
   <ItemGroup>
     <None Remove="Data\" />
     <None Remove="Data\Enum\" />
+    <None Remove="Views\Club\" />
+    <None Remove="Views\Race\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Enum\" />
+    <Folder Include="Views\Club\" />
+    <Folder Include="Views\Race\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
