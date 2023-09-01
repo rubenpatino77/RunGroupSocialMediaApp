@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Models;
 
@@ -24,7 +25,13 @@ namespace RunGroupSocialMedia.Controllers
         {
             List<Race> raceList = _context.Races.ToList();
 
-            return View(raceList);
+            return View(raceList); 
+        }
+
+        public IActionResult Detail(int id)
+        {
+            Race race = _context.Races.Include(a => a.Address).FirstOrDefault(c => c.Id == id);
+            return View(race);
         }
     }
 }
