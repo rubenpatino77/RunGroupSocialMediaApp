@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
+using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,24 +14,24 @@ namespace RunGroupSocialMedia.Controllers
 {
     public class RaceController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IRaceRepository _raceRepository;
 
-        public RaceController(AppDbContext context)
+        public RaceController(IRaceRepository raceRepository)
         {
-            _context = context;
+            _raceRepository = raceRepository;
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Race> raceList = _context.Races.ToList();
+            IEnumerable<Race> raceList = await _raceRepository.GetAll();
 
             return View(raceList); 
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            Race race = _context.Races.Include(a => a.Address).FirstOrDefault(c => c.Id == id);
+            Race race = await _raceRepository.GetByIdAsync(id);
             return View(race);
         }
     }

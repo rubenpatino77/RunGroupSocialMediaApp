@@ -11,12 +11,18 @@
     <None Remove="Data\Enum\" />
     <None Remove="Views\Club\" />
     <None Remove="Views\Race\" />
+    <None Remove="Repository\" />
+    <None Remove="Interfaces\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Enum\" />
     <Folder Include="Views\Club\" />
     <Folder Include="Views\Race\" />
+    <Folder Include="Repository\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
