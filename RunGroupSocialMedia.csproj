@@ -14,15 +14,17 @@
     <None Remove="Repository\" />
     <None Remove="Interfaces\" />
     <None Remove="Services\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Enum\" />
     <Folder Include="Views\Club\" />
     <Folder Include="Views\Race\" />
-    <Folder Include="Repository\" />
+    <Folder Include="Services\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Services\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
@@ -31,5 +33,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
+    <PackageReference Include="Azure.Identity" Version="1.10.0" />
   </ItemGroup>
 </Project>

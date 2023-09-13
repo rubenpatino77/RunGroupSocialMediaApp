@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Storage.Blobs;
+using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Services;
@@ -11,8 +12,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+var azureBlobStorageConnectionString = builder.Configuration.GetConnectionString("AzureBlobStorageSettings:BlobStorageConnection");
+builder.Services.AddSingleton(x => new BlobServiceClient(azureBlobStorageConnectionString));
+
 
 var app = builder.Build();
 
