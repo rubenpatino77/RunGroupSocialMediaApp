@@ -3,7 +3,7 @@ namespace RunGroupSocialMedia.Helpers
 {
 	public class AzureBlobStorageSettings
 	{
-		public string BlobStorageConnection { get; set; }
+		public string SasToken { get; set; }
 
 
         public AzureBlobStorageSettings()
