@@ -13,7 +13,7 @@ namespace RunGroupSocialMedia.Interfaces
 
         Task<List<string>> ListContainers(BlobServiceClient blobServiceClient, string prefix, int? segmentSize);
 
-        Task UploadFromFileAsync(BlobContainerClient containerClient, string localFilePath, string fileName);
+        Task UploadFromFileAsync( IFormFile imageFile);
 
         Task DeleteBlob(BlobClient blob);
 

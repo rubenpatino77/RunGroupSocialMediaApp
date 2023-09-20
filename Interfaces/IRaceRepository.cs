@@ -1,5 +1,6 @@
 ﻿using System;
 using RunGroupSocialMedia.Models;
+using RunGroupSocialMedia.ViewModels;
 
 namespace RunGroupSocialMedia.Interfaces
 {
@@ -15,6 +16,7 @@ namespace RunGroupSocialMedia.Interfaces
         Task<int> GetCountAsync();
 
         bool Add(Race race);
+        Race Add(CreateRaceViewModel form, string imageUrl);
 
         bool Update(Race race);
 

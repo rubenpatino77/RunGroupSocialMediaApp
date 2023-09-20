@@ -53,11 +53,14 @@ namespace RunGroupSocialMedia.Controllers
         public async Task<IActionResult> Create( CreateRaceViewModel form)
         {
             Race race = null;
+            string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + form.photo.ImageFile.FileName + "?" + _photoService.sasToken;
             if (ModelState.IsValid)
             {
-                race = uploadRaceAndImageAsync(form).Result;
+                race = _raceRepository.Add(form, imageUrl);
+                await _photoService.UploadFromFileAsync(form.photo.ImageFile);
                 return RedirectToAction("Index");
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("", "Photo upload failed.");
             }
@@ -65,30 +68,21 @@ namespace RunGroupSocialMedia.Controllers
             return View(race);
         }
 
-        public async Task<Race> uploadRaceAndImageAsync(CreateRaceViewModel form)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            Race race = null;
-            string path = await _photoService.ConvertIFormFileToStringPathAsync(form.photo.ImageFile);
-            string fileName = form.photo.ImageFile.FileName;
-
-            BlobServiceClient blobServiceClient = null; // Initialize as null
-            _photoService.GetBlobServiceClientSAS(ref blobServiceClient);
-
-            _photoService.UploadFromFileAsync(blobServiceClient.GetBlobContainerClient("run-group-container"), path, fileName);
-
-            var photoUrl = blobServiceClient.Uri.AbsoluteUri;
-            race = new Race
+            var race = await _raceRepository.GetByIdAsync(id);
+            if (race == null) return View("Error");
+            var clubVM = new EditRaceViewModel
             {
-                Title = form.Title,
-                Description = form.Description,
-                Image = "https://rungroup.blob.core.windows.net/run-group-container/" + fileName + "?" + _photoService.sasToken,
-                Address = form.Address,
-                RaceCategory = form.RaceCategory
-
+                Title = race.Title,
+                Description = race.Description,
+                AddressId = race.AddressId,
+                Address = race.Address,
+                URL = race.Image,
+                RaceCategory = race.RaceCategory
             };
-            _raceRepository.Add(race);
-
-            return race;
+            return View(clubVM);
         }
     }
 }

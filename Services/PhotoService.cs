@@ -5,6 +5,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 using RunGroupSocialMedia.Helpers;
 using RunGroupSocialMedia.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RunGroupSocialMedia.Services
 {
@@ -89,12 +90,17 @@ namespace RunGroupSocialMedia.Services
         }
 
 
-        public async Task UploadFromFileAsync( BlobContainerClient containerClient, string localFilePath, string fileName)
+        public async Task UploadFromFileAsync( IFormFile imageFile)
         {
-            //string fileName = Path.GetFileName(localFilePath.ToString());
-            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+            string path = await ConvertIFormFileToStringPathAsync(imageFile);
+            string fileName = imageFile.FileName;
 
-            await blobClient.UploadAsync(localFilePath.ToString(), true);
+            BlobServiceClient blobServiceClient = null; // Initialize as null
+            GetBlobServiceClientSAS(ref blobServiceClient);
+
+            BlobClient blobClient = blobServiceClient.GetBlobContainerClient("run-group-container").GetBlobClient(fileName);
+
+            await blobClient.UploadAsync(path.ToString(), true);
         }
 
         public async Task DeleteBlob(BlobClient blob)

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Models;
+using RunGroupSocialMedia.ViewModels;
 
 namespace RunGroupSocialMedia.Services
 {
@@ -20,6 +21,23 @@ namespace RunGroupSocialMedia.Services
         {
             _context.Add(club);
             return Save();
+        }
+
+        public Club Add(CreateClubViewModel form, string imageUrl)
+        {
+            Club club = null;
+            club = new Club
+            {
+                Title = form.Title,
+                Description = form.Description,
+                Image = imageUrl,
+                Address = form.Address,
+                ClubCategory = form.ClubCategory
+
+            };
+            Add(club);
+
+            return club;
         }
 
         public bool Delete(Club club)

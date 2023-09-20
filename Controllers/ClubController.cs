@@ -48,9 +48,11 @@ namespace RunGroupSocialMedia.Controllers
         public async Task<IActionResult> Create(CreateClubViewModel form)
         {
             Club club = null;
+            string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + form.photo.ImageFile.FileName + "?" + _photoService.sasToken;
             if (ModelState.IsValid)
             {
-                club = uploadClubAndImageAsync(form).Result;
+                club = _clubRepository.Add(form, imageUrl);
+                await _photoService.UploadFromFileAsync(form.photo.ImageFile);
                 return RedirectToAction("Index");
             }
             else
@@ -61,30 +63,65 @@ namespace RunGroupSocialMedia.Controllers
             return View(club);
         }
 
-        public async Task<Club> uploadClubAndImageAsync(CreateClubViewModel form)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            Club club = null;
-            string path = await _photoService.ConvertIFormFileToStringPathAsync(form.photo.ImageFile);
-            string fileName = form.photo.ImageFile.FileName;
-
-            BlobServiceClient blobServiceClient = null; // Initialize as null
-            _photoService.GetBlobServiceClientSAS(ref blobServiceClient);
-
-            _photoService.UploadFromFileAsync(blobServiceClient.GetBlobContainerClient("run-group-container"), path, fileName);
-
-            var photoUrl = blobServiceClient.Uri.AbsoluteUri;
-            club = new Club
+            var club = await _clubRepository.GetByIdAsync(id);
+            if (club == null) return View("Error");
+            var clubVM = new EditClubViewModel
             {
-                Title = form.Title,
-                Description = form.Description,
-                Image = "https://rungroup.blob.core.windows.net/run-group-container/" + fileName + "?" + _photoService.sasToken,
-                Address = form.Address,
-                ClubCategory = form.ClubCategory
-
+                Title = club.Title,
+                Description = club.Description,
+                AddressId = club.AddressId,
+                Address = club.Address,
+                URL = club.Image,
+                ClubCategory = club.ClubCategory
             };
-            _clubRepository.Add(club);
+            return View(clubVM);
+        }
 
-            return club;
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditClubViewModel clubVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit club");
+                return View("Edit", clubVM);
+            }
+
+            var userClub = await _clubRepository.GetByIdAsync(id);
+
+            if (userClub == null)
+            {
+                return View("Error");
+            }
+
+            /*var photoResult = await _photoService.UploadFromFileAsync(clubVM.Image);
+
+            if (photoResult.Error != null)
+            {
+                ModelState.AddModelError("Image", "Photo upload failed");
+                return View(clubVM);
+            }
+
+            if (!string.IsNullOrEmpty(userClub.Image))
+            {
+                _ = _photoService.DeleteBlob(userClub.Image);
+            }
+
+            var club = new Club
+            {
+                Id = id,
+                Title = clubVM.Title,
+                Description = clubVM.Description,
+                Image = photoResult.Url.ToString(),
+                AddressId = clubVM.AddressId,
+                Address = clubVM.Address,
+            };
+
+            _clubRepository.Update(club);*/
+
+            return RedirectToAction("Index");
         }
     }
 }

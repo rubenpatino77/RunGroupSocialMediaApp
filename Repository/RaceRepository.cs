@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Models;
+using RunGroupSocialMedia.ViewModels;
 
 namespace RunGroupSocialMedia.Services
 {
@@ -20,6 +21,23 @@ namespace RunGroupSocialMedia.Services
         {
             _context.Add(race);
             return Save();
+        }
+
+        public Race Add(CreateRaceViewModel form, string imageUrl)
+        {
+            Race race = null;
+            race = new Race
+            {
+                Title = form.Title,
+                Description = form.Description,
+                Image = imageUrl,
+                Address = form.Address,
+                RaceCategory = form.RaceCategory
+
+            };
+            Add(race);
+
+            return race;
         }
 
         public bool Delete(Race race)

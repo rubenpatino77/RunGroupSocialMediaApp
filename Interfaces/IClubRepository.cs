@@ -1,6 +1,7 @@
 ﻿using System;
 using RunGroupSocialMedia.Data.Enum;
 using RunGroupSocialMedia.Models;
+using RunGroupSocialMedia.ViewModels;
 
 namespace RunGroupSocialMedia.Interfaces
 {
@@ -16,6 +17,7 @@ namespace RunGroupSocialMedia.Interfaces
         Task<int> GetCountAsync();
 
         bool Add(Club club);
+        Club Add(CreateClubViewModel form, string imageUrl);
 
         bool Update(Club club);
 
