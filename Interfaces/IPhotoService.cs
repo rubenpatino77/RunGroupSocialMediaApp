@@ -18,6 +18,8 @@ namespace RunGroupSocialMedia.Interfaces
         Task DeleteBlob(BlobClient blob);
 
         Task<string> ConvertIFormFileToStringPathAsync(IFormFile file);
+
+        bool photoExists(IFormFile photo);
     }
 }
 

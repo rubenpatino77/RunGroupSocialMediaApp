@@ -23,12 +23,6 @@ public class HomeController : Controller
 
     public async Task<IActionResult> IndexAsync()
     {
-
-        BlobServiceClient blobServiceClient = null; // Initialize as null
-        _photoService.GetBlobServiceClientSAS(ref blobServiceClient);
-
-        var containerNames = await _photoService.ListContainers(blobServiceClient, null, null);
-        _logger.LogInformation("List of Containers: {0}", string.Join(", ", containerNames));
         return View();
     }
 

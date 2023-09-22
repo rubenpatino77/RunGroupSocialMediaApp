@@ -2,6 +2,7 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using RunGroupSocialMedia.Helpers;
 using RunGroupSocialMedia.Interfaces;
@@ -106,6 +107,16 @@ namespace RunGroupSocialMedia.Services
         public async Task DeleteBlob(BlobClient blob)
         {
             await blob.DeleteAsync();
+        }
+
+        public bool photoExists(IFormFile photo)
+        {
+            string fileName = photo.FileName;
+            BlobServiceClient blobServiceClient = null; // Initialize as null
+            GetBlobServiceClientSAS(ref blobServiceClient);
+            BlobClient blobClient = blobServiceClient.GetBlobContainerClient("run-group-container").GetBlobClient(fileName);
+
+            return blobClient.Exists();
         }
     }
 }

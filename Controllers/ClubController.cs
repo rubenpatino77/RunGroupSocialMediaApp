@@ -68,6 +68,7 @@ namespace RunGroupSocialMedia.Controllers
         {
             var club = await _clubRepository.GetByIdAsync(id);
             if (club == null) return View("Error");
+
             var clubVM = new EditClubViewModel
             {
                 Title = club.Title,
@@ -81,32 +82,31 @@ namespace RunGroupSocialMedia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, EditClubViewModel clubVM)
+         public async Task<IActionResult> Edit(int id, EditClubViewModel clubVM)
         {
+            string clubImageUrl;
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Failed to edit club");
                 return View("Edit", clubVM);
             }
 
-            var userClub = await _clubRepository.GetByIdAsync(id);
+            var userClub = await _clubRepository.GetByIdAsyncNoTracking(id);
 
             if (userClub == null)
             {
                 return View("Error");
             }
 
-            /*var photoResult = await _photoService.UploadFromFileAsync(clubVM.Image);
-
-            if (photoResult.Error != null)
+            if(clubVM.Image != null)
             {
-                ModelState.AddModelError("Image", "Photo upload failed");
-                return View(clubVM);
-            }
-
-            if (!string.IsNullOrEmpty(userClub.Image))
+                await _photoService.UploadFromFileAsync(clubVM.Image);
+                string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + clubVM.Image.FileName + "?" + _photoService.sasToken;
+                clubImageUrl = imageUrl;
+            } else
             {
-                _ = _photoService.DeleteBlob(userClub.Image);
+                clubImageUrl = userClub.Image;
             }
 
             var club = new Club
@@ -114,12 +114,12 @@ namespace RunGroupSocialMedia.Controllers
                 Id = id,
                 Title = clubVM.Title,
                 Description = clubVM.Description,
-                Image = photoResult.Url.ToString(),
+                Image = clubImageUrl,
                 AddressId = clubVM.AddressId,
                 Address = clubVM.Address,
             };
 
-            _clubRepository.Update(club);*/
+            _clubRepository.Update(club);
 
             return RedirectToAction("Index");
         }
