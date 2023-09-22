@@ -12,6 +12,7 @@ namespace RunGroupSocialMedia.Interfaces
         Task<IEnumerable<Race>> GetAllRacesByCity(string city);
 
         Task<Race> GetByIdAsync(int id);
+        Task<Race?> GetByIdAsyncNoTracking(int id);
 
         Task<int> GetCountAsync();
 

@@ -14,7 +14,6 @@ namespace RunGroupSocialMedia.ViewModels
         public int? AddressId { get; set; }
         public Address? Address { get; set; }
         public ClubCategory ClubCategory { get; set; }
-
         public EditClubViewModel()
 		{
 		}

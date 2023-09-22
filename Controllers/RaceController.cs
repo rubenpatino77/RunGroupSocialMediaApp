@@ -73,7 +73,7 @@ namespace RunGroupSocialMedia.Controllers
         {
             var race = await _raceRepository.GetByIdAsync(id);
             if (race == null) return View("Error");
-            var clubVM = new EditRaceViewModel
+            var raceVM = new EditRaceViewModel
             {
                 Title = race.Title,
                 Description = race.Description,
@@ -82,7 +82,51 @@ namespace RunGroupSocialMedia.Controllers
                 URL = race.Image,
                 RaceCategory = race.RaceCategory
             };
-            return View(clubVM);
+            return View(raceVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditRaceViewModel raceVM)
+        {
+            string raceImageUrl;
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit race");
+                return View("Edit", raceVM);
+            }
+
+            var userRace = await _raceRepository.GetByIdAsyncNoTracking(id);
+
+            if (userRace == null)
+            {
+                return View("Error");
+            }
+
+            if (raceVM.Image != null)
+            {
+                await _photoService.UploadFromFileAsync(raceVM.Image);
+                string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + raceVM.Image.FileName + "?" + _photoService.sasToken;
+                raceImageUrl = imageUrl;
+            }
+            else
+            {
+                raceImageUrl = userRace.Image;
+            }
+
+            var race = new Race
+            {
+                Id = id,
+                Title = raceVM.Title,
+                Description = raceVM.Description,
+                Image = raceImageUrl,
+                AddressId = raceVM.AddressId,
+                Address = raceVM.Address,
+            };
+
+            _raceRepository.Update(race);
+
+            return RedirectToAction("Index");
         }
     }
 }
