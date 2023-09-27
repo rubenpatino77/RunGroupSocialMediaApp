@@ -112,7 +112,7 @@ namespace RunGroupSocialMedia.Data
             }
         }
 
-        /*public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
+        public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
@@ -168,7 +168,7 @@ namespace RunGroupSocialMedia.Data
                     await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
                 }
             }
-        }*/
+        }
     }
 }
 

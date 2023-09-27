@@ -1,8 +1,11 @@
 ﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Helpers;
 using RunGroupSocialMedia.Interfaces;
+using RunGroupSocialMedia.Models;
 using RunGroupSocialMedia.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+       .AddCookie();
+
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
@@ -24,7 +34,7 @@ var app = builder.Build();
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
 {
-    Seed.SeedData(app);
+    await Seed.SeedUsersAndRolesAsync(app);
     //Seed.SeedData(app);
 }
 
