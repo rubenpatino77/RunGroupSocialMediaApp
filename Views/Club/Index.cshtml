@@ -1,5 +1,7 @@
-﻿@model IEnumerable<Club>
+﻿@using RunGroupSocialMedia.Interfaces
 
+@model IEnumerable<Club>
+@inject IPhotoService photoService
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -7,7 +9,7 @@
 }
 
 <div>
-    <h1>All races Listed below.</h1>
+    <h1>All clubs Listed below.</h1>
     <a asp-controller="club" asp-action="Create" type="button" class="btn btn-sm btn-outline-secondary">New Club</a>
 </div>
 
@@ -19,7 +21,7 @@
             {
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" src="@item.Image" width="100%" height="225" alt="Card image cap">
+                        <img class="card-img-top" src="@($"{photoService.containerUrl}{item.Image}?{photoService.sasToken}")" width="100%" height="225" alt="Card image cap">
                         <div class="card-body">
                             <p class="card-text">@item.Title</p>
                             <p class="card-text">@item.Description </p>
@@ -27,6 +29,7 @@
                                 <div class="btn-group">
                                     <a asp-controller="club" asp-action="Detail" asp-route-id="@item.Id" type="button" class="btn btn-sm btn-outline-secondary">View</a>
                                     <a asp-controller="club" asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a asp-controller="club" asp-action="Delete" asp-route-id="@item.Id" type="button" class="btn btn-sm btn-outline-secondary">Delete</a>
                                 </div>
                                 <small class="text-muted">@item.ClubCategory</small>
                             </div>

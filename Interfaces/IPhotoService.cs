@@ -8,6 +8,7 @@ namespace RunGroupSocialMedia.Interfaces
 	public interface IPhotoService
 	{
         string sasToken { get; }
+        string containerUrl { get; }
 
         void GetBlobServiceClientSAS(ref BlobServiceClient blobServiceClient);
 
@@ -15,11 +16,11 @@ namespace RunGroupSocialMedia.Interfaces
 
         Task UploadFromFileAsync( IFormFile imageFile);
 
-        Task DeleteBlob(BlobClient blob);
-
         Task<string> ConvertIFormFileToStringPathAsync(IFormFile file);
 
         bool photoExists(IFormFile photo);
+
+        Task DeleteBlobAsync(string fileName);
     }
 }
 

@@ -14,10 +14,12 @@ namespace RunGroupSocialMedia.Services
 	{
         public string accountName = "rungroup";
         public string containerName = "run-group-container";
+        public string containerUrl = "https://rungroup.blob.core.windows.net/run-group-container/";
 
         public string sasToken;
 
         string IPhotoService.sasToken => sasToken;
+        string IPhotoService.containerUrl => containerUrl;
 
         public PhotoService(IOptions<AzureBlobStorageSettings> options)
 		{
@@ -104,11 +106,6 @@ namespace RunGroupSocialMedia.Services
             await blobClient.UploadAsync(path.ToString(), true);
         }
 
-        public async Task DeleteBlob(BlobClient blob)
-        {
-            await blob.DeleteAsync();
-        }
-
         public bool photoExists(IFormFile photo)
         {
             string fileName = photo.FileName;
@@ -117,6 +114,17 @@ namespace RunGroupSocialMedia.Services
             BlobClient blobClient = blobServiceClient.GetBlobContainerClient("run-group-container").GetBlobClient(fileName);
 
             return blobClient.Exists();
+        }
+
+        public async Task DeleteBlobAsync(string fileName)
+        {
+
+            BlobServiceClient blobServiceClient = null; // Initialize as null
+            GetBlobServiceClientSAS(ref blobServiceClient);
+
+            BlobClient blobClient = blobServiceClient.GetBlobContainerClient("run-group-container").GetBlobClient(fileName);
+
+            await blobClient.DeleteAsync();
         }
     }
 }

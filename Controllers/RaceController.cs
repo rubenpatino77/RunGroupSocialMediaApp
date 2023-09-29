@@ -53,7 +53,7 @@ namespace RunGroupSocialMedia.Controllers
         public async Task<IActionResult> Create( CreateRaceViewModel form)
         {
             Race race = null;
-            string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + form.photo.ImageFile.FileName + "?" + _photoService.sasToken;
+            string imageUrl = form.photo.ImageFile.FileName;
             if (ModelState.IsValid)
             {
                 race = _raceRepository.Add(form, imageUrl);
@@ -106,7 +106,7 @@ namespace RunGroupSocialMedia.Controllers
             if (raceVM.Image != null)
             {
                 await _photoService.UploadFromFileAsync(raceVM.Image);
-                string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + raceVM.Image.FileName + "?" + _photoService.sasToken;
+                string imageUrl = raceVM.Image.FileName;
                 raceImageUrl = imageUrl;
             }
             else
@@ -126,6 +126,33 @@ namespace RunGroupSocialMedia.Controllers
 
             _raceRepository.Update(race);
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var raceDetails = await _raceRepository.GetByIdAsync(id);
+            if (raceDetails == null) return View("Error");
+            return View(raceDetails);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteRace(int id)
+        {
+            var raceDetails = await _raceRepository.GetByIdAsync(id);
+
+            if (raceDetails == null)
+            {
+                return View("Error");
+            }
+
+            if (!string.IsNullOrEmpty(raceDetails.Image))
+            {
+                _photoService.DeleteBlobAsync(raceDetails.Image);
+            }
+
+            _raceRepository.Delete(raceDetails);
             return RedirectToAction("Index");
         }
     }

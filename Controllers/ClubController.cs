@@ -48,7 +48,7 @@ namespace RunGroupSocialMedia.Controllers
         public async Task<IActionResult> Create(CreateClubViewModel form)
         {
             Club club = null;
-            string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + form.photo.ImageFile.FileName + "?" + _photoService.sasToken;
+            string imageUrl = form.photo.ImageFile.FileName;
             if (ModelState.IsValid)
             {
                 club = _clubRepository.Add(form, imageUrl);
@@ -102,7 +102,7 @@ namespace RunGroupSocialMedia.Controllers
             if(clubVM.Image != null)
             {
                 await _photoService.UploadFromFileAsync(clubVM.Image);
-                string imageUrl = "https://rungroup.blob.core.windows.net/run-group-container/" + clubVM.Image.FileName + "?" + _photoService.sasToken;
+                string imageUrl = clubVM.Image.FileName;
                 clubImageUrl = imageUrl;
             } else
             {
@@ -121,6 +121,33 @@ namespace RunGroupSocialMedia.Controllers
 
             _clubRepository.Update(club);
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var clubDetails = await _clubRepository.GetByIdAsync(id);
+            if (clubDetails == null) return View("Error");
+            return View(clubDetails);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteClub(int id)
+        {
+            var clubDetails = await _clubRepository.GetByIdAsync(id);
+
+            if (clubDetails == null)
+            {
+                return View("Error");
+            }
+
+            if (!string.IsNullOrEmpty(clubDetails.Image))
+            {
+                _photoService.DeleteBlobAsync(clubDetails.Image);
+            }
+
+            _clubRepository.Delete(clubDetails);
             return RedirectToAction("Index");
         }
     }
