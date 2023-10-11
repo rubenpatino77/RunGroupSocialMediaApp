@@ -2,6 +2,8 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using RunGroupSocialMedia.Helpers;
@@ -12,6 +14,43 @@ namespace RunGroupSocialMedia.Services
 {
 	public class PhotoService : IPhotoService
 	{
+
+        private readonly Cloudinary _cloundinary;
+
+        public PhotoService(IOptions<CloudinarySettings> config)
+        {
+            var acc = new Account(
+                config.Value.CloudName,
+                config.Value.ApiKey,
+                config.Value.ApiSecret
+                );
+            _cloundinary = new Cloudinary(acc);
+        }
+
+        public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
+        {
+            var uploadResult = new ImageUploadResult();
+            if (file.Length > 0)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
+                };
+                uploadResult = await _cloundinary.UploadAsync(uploadParams);
+            }
+            return uploadResult;
+        }
+
+        public async Task<DeletionResult> DeletePhotoAsync(string publicUrl)
+        {
+            var publicId = publicUrl.Split('/').Last().Split('.')[0];
+            var deleteParams = new DeletionParams(publicId);
+            return await _cloundinary.DestroyAsync(deleteParams);
+        }
+
+        /*
         public string accountName = "rungroup";
         public string containerName = "run-group-container";
         public string containerUrl = "https://rungroup.blob.core.windows.net/run-group-container/";
@@ -125,7 +164,7 @@ namespace RunGroupSocialMedia.Services
             BlobClient blobClient = blobServiceClient.GetBlobContainerClient("run-group-container").GetBlobClient(fileName);
 
             await blobClient.DeleteAsync();
-        }
+        }*/
     }
 }
 

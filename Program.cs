@@ -6,6 +6,7 @@ using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Helpers;
 using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Models;
+using RunGroupSocialMedia.Repository;
 using RunGroupSocialMedia.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.Configure<AzureBlobStorageSettings>(builder.Configuration.GetSection("PhotoServiceSettings"));
 
@@ -51,7 +54,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

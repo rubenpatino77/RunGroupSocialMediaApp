@@ -14,6 +14,8 @@ namespace RunGroupSocialMedia.ViewModels
         public RaceCategory RaceCategory { get; set; }
 
         public Photo photo { get; set; }
-	}
+
+        public string AppUserId { get; set; }
+    }
 }
 

@@ -19,11 +19,13 @@ namespace RunGroupSocialMedia.Controllers
     {
         private readonly IClubRepository _clubRepository;
         private readonly IPhotoService _photoService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService)
+        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _clubRepository = clubRepository;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: /<controller>/
@@ -39,20 +41,24 @@ namespace RunGroupSocialMedia.Controllers
             return View(club);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
+             var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
+            return View(createClubViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateClubViewModel form)
         {
             Club club = null;
-            string imageUrl = form.photo.ImageFile.FileName;
+            var imageUrl = await _photoService.AddPhotoAsync(form.photo.ImageFile);
+            //string imageUrl = form.photo.ImageFile.FileName;
             if (ModelState.IsValid)
             {
-                club = _clubRepository.Add(form, imageUrl);
-                await _photoService.UploadFromFileAsync(form.photo.ImageFile);
+                club = _clubRepository.Add(form, imageUrl.Url.ToString());
+                //await _photoService.AddPhotoAsync(form.photo.ImageFile);
                 return RedirectToAction("Index");
             }
             else
@@ -101,7 +107,7 @@ namespace RunGroupSocialMedia.Controllers
 
             if(clubVM.Image != null)
             {
-                await _photoService.UploadFromFileAsync(clubVM.Image);
+                await _photoService.AddPhotoAsync(clubVM.Image);
                 string imageUrl = clubVM.Image.FileName;
                 clubImageUrl = imageUrl;
             } else
@@ -144,7 +150,7 @@ namespace RunGroupSocialMedia.Controllers
 
             if (!string.IsNullOrEmpty(clubDetails.Image))
             {
-                _photoService.DeleteBlobAsync(clubDetails.Image);
+                _photoService.DeletePhotoAsync(clubDetails.Image);
             }
 
             _clubRepository.Delete(clubDetails);

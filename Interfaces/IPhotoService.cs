@@ -2,11 +2,18 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using CloudinaryDotNet.Actions;
 
 namespace RunGroupSocialMedia.Interfaces
 {
 	public interface IPhotoService
 	{
+        Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
+
+        Task<DeletionResult> DeletePhotoAsync(string publicUrl);
+
+        /* BELOW WORKS FOR AZURE
+        
         string sasToken { get; }
         string containerUrl { get; }
 
@@ -20,7 +27,7 @@ namespace RunGroupSocialMedia.Interfaces
 
         bool photoExists(IFormFile photo);
 
-        Task DeleteBlobAsync(string fileName);
+        Task DeleteBlobAsync(string fileName);*/
     }
 }
 

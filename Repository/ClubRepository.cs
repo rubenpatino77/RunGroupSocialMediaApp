@@ -31,6 +31,7 @@ namespace RunGroupSocialMedia.Services
                 Title = form.Title,
                 Description = form.Description,
                 Image = imageUrl,
+                AppUserId = form.AppUserId,
                 Address = form.Address,
                 ClubCategory = form.ClubCategory
 

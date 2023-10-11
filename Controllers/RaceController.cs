@@ -23,11 +23,13 @@ namespace RunGroupSocialMedia.Controllers
     {
         private readonly IRaceRepository _raceRepository;
         private IPhotoService _photoService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RaceController(IRaceRepository raceRepository, IPhotoService photoService)
+        public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _raceRepository = raceRepository;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: /<controller>/
@@ -44,20 +46,24 @@ namespace RunGroupSocialMedia.Controllers
             return View(race);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var createRaceViewModel = new CreateRaceViewModel { AppUserId = curUserId };
+            return View(createRaceViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create( CreateRaceViewModel form)
         {
             Race race = null;
-            string imageUrl = form.photo.ImageFile.FileName;
+            var imageUrl = await _photoService.AddPhotoAsync(form.photo.ImageFile);
+            //string imageUrl = form.photo.ImageFile.FileName;
             if (ModelState.IsValid)
             {
-                race = _raceRepository.Add(form, imageUrl);
-                await _photoService.UploadFromFileAsync(form.photo.ImageFile);
+                race = _raceRepository.Add(form, imageUrl.Url.ToString());
+                //await _photoService.AddPhotoAsync(form.photo.ImageFile);
                 return RedirectToAction("Index");
             }
             else
@@ -105,7 +111,7 @@ namespace RunGroupSocialMedia.Controllers
 
             if (raceVM.Image != null)
             {
-                await _photoService.UploadFromFileAsync(raceVM.Image);
+                await _photoService.AddPhotoAsync(raceVM.Image);
                 string imageUrl = raceVM.Image.FileName;
                 raceImageUrl = imageUrl;
             }
@@ -149,7 +155,7 @@ namespace RunGroupSocialMedia.Controllers
 
             if (!string.IsNullOrEmpty(raceDetails.Image))
             {
-                _photoService.DeleteBlobAsync(raceDetails.Image);
+                _photoService.DeletePhotoAsync(raceDetails.Image);
             }
 
             _raceRepository.Delete(raceDetails);

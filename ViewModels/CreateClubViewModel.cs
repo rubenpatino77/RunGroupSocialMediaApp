@@ -14,6 +14,8 @@ namespace RunGroupSocialMedia.ViewModels
         public ClubCategory ClubCategory { get; set; }
 
         public Photo photo { get; set; }
+
+        public string AppUserId { get; set; }
     }
 }
 
