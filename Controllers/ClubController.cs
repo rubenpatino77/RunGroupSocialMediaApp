@@ -45,7 +45,7 @@ namespace RunGroupSocialMedia.Controllers
         public IActionResult Create()
         {
             var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
-             var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
+            var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
             return View(createClubViewModel);
         }
 

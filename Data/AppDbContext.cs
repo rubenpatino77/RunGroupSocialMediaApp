@@ -17,4 +17,3 @@ namespace RunGroupSocialMedia.Data
         public DbSet<Address> Addresses { get; set; }
     }
 }
-
