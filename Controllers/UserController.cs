@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RunGroupSocialMedia.Interfaces;
+using RunGroupSocialMedia.Models;
 using RunGroupSocialMedia.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,10 +16,12 @@ namespace RunGroupSocialMedia.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, UserManager<AppUser> userManager)
         {
             _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         [HttpGet("users")]
@@ -35,7 +40,7 @@ namespace RunGroupSocialMedia.Controllers
                     //State = user.State,
                     Mileage = user.Mileage,
                     UserName = user.UserName,
-                    //ProfileImageUrl = user.ProfileImageUrl ?? "/img/avatar-male-4.jpg",
+                    ProfileImageUrl = user.ProfileImageUrl,
                 };
                 result.Add(userViewModel);
             }
