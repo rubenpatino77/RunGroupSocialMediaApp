@@ -34,8 +34,10 @@ namespace RunGroupSocialMedia.Controllers
         {
             var userRaces = await _dashboardRepository.GetAllUserRaces();
             var userClubs = await _dashboardRepository.GetAllUserClubs();
+            string userEmail = _dashboardRepository.GetUserEmail(_contextAccessor.HttpContext.User.GetUserId());
             var dashboardViewModel = new DashboardViewModel()
             {
+                Email = userEmail,
                 Races = userRaces,
                 Clubs = userClubs
             };

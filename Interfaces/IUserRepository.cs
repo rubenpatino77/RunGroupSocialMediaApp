@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Models;
 
 namespace RunGroupSocialMedia.Interfaces
@@ -11,6 +12,8 @@ namespace RunGroupSocialMedia.Interfaces
         bool Update(AppUser user);
         bool Delete(AppUser user);
         bool Save();
+        Task<List<Club>> GetAllUserClubsByEmail(string userEmail);
+        Task<List<Race>> GetAllUserRacesByEmail(string userEmail);
     }
 }
 

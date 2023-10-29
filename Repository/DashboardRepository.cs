@@ -39,7 +39,12 @@ namespace RunGroupSocialMedia.Repository
         {
             return await _context.Users.Where(u => u.Id == id).AsNoTracking().FirstOrDefaultAsync();
         }
-        
+
+        public string GetUserEmail(string id)
+        {
+            return GetUserById(id).Result.Email.ToString();
+        }
+
         public bool Update(AppUser user)
         {
             _context.Users.Update(user);

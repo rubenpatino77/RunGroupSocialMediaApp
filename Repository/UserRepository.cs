@@ -15,6 +15,19 @@ namespace RunGroupSocialMedia.Repository
             _context = context;
         }
 
+        public async Task<List<Club>> GetAllUserClubsByEmail(string userEmail)
+        {
+
+            var userClubs = _context.Clubs.Where(r => r.AppUser.Email == userEmail);
+            return userClubs.ToList();
+        }
+
+        public async Task<List<Race>> GetAllUserRacesByEmail(string userEmail)
+        {
+            var userRaces = _context.Races.Where(r => r.AppUser.Email == userEmail);
+            return userRaces.ToList();
+        }
+
         public bool Add(AppUser user)
         {
             throw new NotImplementedException();

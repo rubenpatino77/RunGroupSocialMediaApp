@@ -55,16 +55,20 @@ namespace RunGroupSocialMedia.Controllers
             {
                 return RedirectToAction("Index", "Users");
             }
-
+            var userRaces = await _userRepository.GetAllUserRacesByEmail(user.Email);
+            var userClubs = await _userRepository.GetAllUserClubsByEmail(user.Email);
+            //var userName = await _userRepository.
             var userDetailViewModel = new UserDetailViewModel()
             {
                 Id = user.Id,
                 Pace = user.Pace,
-                //City = user.City,
-                //State = user.State,
+                City = user.City,
+                State = user.State,
                 Mileage = user.Mileage,
                 UserName = user.UserName,
-                //ProfileImageUrl = user.ProfileImageUrl ?? "/img/avatar-male-4.jpg",
+                ProfileImageUrl = user.ProfileImageUrl,
+                Races = userRaces,
+                Clubs = userClubs
             };
             return View(userDetailViewModel);
         }

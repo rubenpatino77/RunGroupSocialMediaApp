@@ -5,6 +5,8 @@ namespace RunGroupSocialMedia.Interfaces
 {
 	public interface IDashboardRepository
 	{
+        string GetUserEmail(string id);
+
         Task<List<Club>> GetAllUserClubs();
 
         Task<List<Race>> GetAllUserRaces();
