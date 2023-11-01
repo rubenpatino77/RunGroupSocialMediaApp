@@ -1,6 +1,7 @@
 ﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
@@ -99,6 +100,7 @@ namespace RunGroupSocialMedia.Controllers
             }
 
             var userClub = await _clubRepository.GetByIdAsyncNoTracking(id);
+            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
 
             if (userClub == null)
             {
@@ -107,8 +109,8 @@ namespace RunGroupSocialMedia.Controllers
 
             if(clubVM.Image != null)
             {
-                await _photoService.AddPhotoAsync(clubVM.Image);
-                string imageUrl = clubVM.Image.FileName;
+                var uploadResult = await _photoService.AddPhotoAsync(clubVM.Image);
+                string imageUrl = uploadResult.Url.ToString();
                 clubImageUrl = imageUrl;
             } else
             {
@@ -123,6 +125,7 @@ namespace RunGroupSocialMedia.Controllers
                 Image = clubImageUrl,
                 AddressId = clubVM.AddressId,
                 Address = clubVM.Address,
+                AppUserId = curUserId
             };
 
             _clubRepository.Update(club);

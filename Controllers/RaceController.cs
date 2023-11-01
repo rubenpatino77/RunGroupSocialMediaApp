@@ -103,6 +103,7 @@ namespace RunGroupSocialMedia.Controllers
             }
 
             var userRace = await _raceRepository.GetByIdAsyncNoTracking(id);
+            var curUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
 
             if (userRace == null)
             {
@@ -112,7 +113,8 @@ namespace RunGroupSocialMedia.Controllers
             if (raceVM.Image != null)
             {
                 await _photoService.AddPhotoAsync(raceVM.Image);
-                string imageUrl = raceVM.Image.FileName;
+                var uploadResult = await _photoService.AddPhotoAsync(raceVM.Image);
+                string imageUrl = uploadResult.Url.ToString();
                 raceImageUrl = imageUrl;
             }
             else
@@ -128,6 +130,7 @@ namespace RunGroupSocialMedia.Controllers
                 Image = raceImageUrl,
                 AddressId = raceVM.AddressId,
                 Address = raceVM.Address,
+                AppUserId = curUserId
             };
 
             _raceRepository.Update(race);
