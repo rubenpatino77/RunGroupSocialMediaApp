@@ -32,14 +32,21 @@ namespace RunGroupSocialMedia.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
+            var userId = _contextAccessor.HttpContext.User.GetUserId();
+            var user = await _dashboardRepository.GetUserById(userId);
             var userRaces = await _dashboardRepository.GetAllUserRaces();
             var userClubs = await _dashboardRepository.GetAllUserClubs();
-            string userEmail = _dashboardRepository.GetUserEmail(_contextAccessor.HttpContext.User.GetUserId());
+            string userEmail = _dashboardRepository.GetUserEmail(userId);
             var dashboardViewModel = new DashboardViewModel()
             {
                 Email = userEmail,
                 Races = userRaces,
-                Clubs = userClubs
+                Clubs = userClubs,
+                ProfileImageUrl = user.ProfileImageUrl,
+                Pace = user.Pace,
+                State = user.State,
+                City = user.City,
+
             };
             return View(dashboardViewModel);
         }
