@@ -3,13 +3,16 @@
 
 @model RunGroupSocialMedia.ViewModels.DashboardViewModel
 
-<section class="py-5 text-center container">
-    <div class="row py-lg-1">
+<section class="py-1 text-center container">
+    <div class="row">
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light">Welcome to your dashborad!</h1>
             <h3 class="">User: @Model.Email</h3>
-            <div class="py-5">
-                <img alt="Image" src="@Model.ProfileImageUrl" width="75%" class="border border-dark border-5 rounded-4 img-fluid" />
+            <div class="py-2">
+                <img alt="Image" src="@Model.ProfileImageUrl" width="75%" class="border border-dark border-5 rounded-pill img-fluid" />
+            </div>
+            <div class="py-2">
+                <h4>Your Description: A description goes here.</h4>
             </div>
             <p>
                 <a type="button" class="btn btn-secondary" asp-area="" asp-controller="Dashboard" asp-action="EditProfile">Edit Profile</a>
