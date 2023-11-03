@@ -8,10 +8,13 @@
 <section class="jumbotron text-center">
     <div class="container">
         <h1 class="jumbotron-heading">Welcome to RunGroups!</h1>
-        <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
+        <p class="lead text-muted">Login to join Running Clubs near you and attend some exciting races! You can also click on the Clubs navigation button to explore all clubs.</p>
         <p>
-            <a href="#" class="btn btn-primary my-2">Main call to action</a>
-            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-outline-success my-2" asp-controller="Account" asp-action="Login">Login</a>
+            }
+            <a class="btn btn-outline-primary my-2" asp-controller="Club" asp-action="Index">Explore Clubs</a>
         </p>
     </div>
 </section>
@@ -22,47 +25,17 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4 box-shadow">
-                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
-                    </div>
+                    <img class="card-img-top" src="https://res.cloudinary.com/dw5mvknbl/image/upload/v1698975509/varpnl1sytllvruvubpc.jpg" alt="Card image cap" width="100%" height="300">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 box-shadow">
-                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
-                    </div>
+                    <img class="card-img-top" src="https://res.cloudinary.com/dw5mvknbl/image/upload/v1698975558/ajikaneursvy5arcigso.jpg" alt="Card image cap" width="100%" height="300">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 box-shadow">
-                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
-                    </div>
+                    <img class="card-img-top" src="https://res.cloudinary.com/dw5mvknbl/image/upload/v1698975598/xqtr7vqpby5jdirfhdjj.jpg" alt="Card image cap" width="100%" height="300">
                 </div>
             </div>
         </div>
@@ -85,46 +58,31 @@
                     <h3>Running clubs near @Model.City, @Model.State</h3>
                 </div>
                 <!--end of col-->
-                <div class="col-auto">
-                    <a href="#" class="btn btn-outline-primary">View all</a>
-                </div>
-                <!--end of col-->
             </div>
             <ul class="row feature-list feature-list-sm">
                 @foreach (var item in Model.Clubs)
                 {
-                    <li class="col-12 col-md-6 col-lg-4">
-                        <div class="card">
-                            <a href="#">
-                                <img class="card-img-top" src="@item.Image" alt="Card image cap">
-                            </a>
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <img class="card-img-top" src="@item.Image" width="100%" height="225" alt="Card image cap">
                             <div class="card-body">
-                                <a href="#">
-                                    <h4 class="card-title">@item.Title</h4>
-                                    <p class="card-text text-body">@item.Description</p>
-                                </a>
-                            </div>
-                            <div class="card-footer card-footer-borderless d-flex justify-content-between">
-                                <div class="text-small">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"><i class="icon-heart"></i> 221</li>
-                                        <li class="list-inline-item"><i class="icon-message"></i> 14</li>
-                                    </ul>
-                                </div>
-                                <div class="dropup">
-                                    <a type="btn btn-success" asp-controller="Race" asp-action="Detail" asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-secondary">View</a>
-                                    <div class="dropdown-menu dropdown-menu-sm" aria-labelledby="SidekickButton">
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Share</a>
-                                        <a class="dropdown-item" href="#">Comment</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Report</a>
+                                <p class="card-text">@item.Title</p>
+                                <p class="card-text col-12 text-truncate">@item.Description </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a asp-controller="club" asp-action="Detail" asp-route-id="@item.Id" type="button" class="btn btn-sm btn-outline-secondary">View</a>
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                                        {
+                                            <a asp-controller="club" asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                            <a asp-controller="club" asp-action="Delete" asp-route-id="@item.Id" type="button" class="btn btn-sm btn-outline-secondary">Delete</a>
+                                        }
+
                                     </div>
+                                    <small class="text-muted">@item.ClubCategory</small>
                                 </div>
                             </div>
                         </div>
-                    </li>
+                    </div>
                 }
             </ul>
         }
