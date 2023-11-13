@@ -44,6 +44,7 @@ namespace RunGroupSocialMedia.Controllers
                 Clubs = userClubs,
                 ProfileImageUrl = user.ProfileImageUrl,
                 Pace = user.Pace,
+                Mileage = user.Mileage,
                 State = user.State,
                 City = user.City,
 

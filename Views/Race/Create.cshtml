@@ -9,13 +9,13 @@
 }
 
 <div class="container">
-    <h1>Create view. yay!</h1>
+    <h1>Create a race!</h1>
 
     <form method="post" asp-action="Create" enctype="multipart/form-data">
         <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
         <div class="form-group">
             <label asp-for="Title">Title</label>
-            <input asp-for="Title" class="form-control" placeholder="Enter email">
+            <input asp-for="Title" class="form-control" placeholder="Race Title">
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -50,6 +50,7 @@
             <input asp-for="photo.ImageFile" type="file" class="form-control" placeholder="Image">
             <span asp-validation-for="photo.ImageFile" class="text-danger"></span>
         </div>
+        <br/>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
  </div>
