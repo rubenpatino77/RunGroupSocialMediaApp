@@ -47,7 +47,6 @@ namespace RunGroupSocialMedia.Controllers
                 Mileage = user.Mileage,
                 State = user.State,
                 City = user.City,
-
             };
             return View(dashboardViewModel);
         }
@@ -74,14 +73,14 @@ namespace RunGroupSocialMedia.Controllers
             return View(editMV);
         }
 
-        public void MapUserEdit(AppUser user, EditUserDashboardViewModel editVM, ImageUploadResult uploadResult)
+        public void MapUserEdit(AppUser user, EditUserDashboardViewModel editVM, string uploadResult)
         {
             user.Id = editVM.id;
             user.City = editVM.City;
             user.State = editVM.State;
             user.Pace = editVM.Pace;
             user.Mileage = editVM.Mileage;
-            user.ProfileImageUrl = uploadResult.Url.ToString();
+            user.ProfileImageUrl = uploadResult;
         }
 
         [HttpPost]
@@ -96,16 +95,16 @@ namespace RunGroupSocialMedia.Controllers
 
             var user = await _dashboardRepository.GetByIdNoTracking(editVM.id);
 
-            if(user.ProfileImageUrl == null || user.ProfileImageUrl == "")
+            if(editVM.ProfileImageUrl != null && editVM.ProfileImageUrl != "")
             {
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
-                MapUserEdit(user, editVM, photoResult);
+                MapUserEdit(user, editVM, photoResult.Url.ToString());
                 _dashboardRepository.Update(user);
 
                 return RedirectToAction("Index");
             } else
             {
-                try
+                /*try
                 {
                     await _photoService.DeletePhotoAsync(user.ProfileImageUrl);
                 } catch(Exception ex)
@@ -113,7 +112,8 @@ namespace RunGroupSocialMedia.Controllers
                     ModelState.AddModelError("", "Could not delete photo");
                     return View(editVM);
                 }
-                var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
+                var photoResult = await _photoService.AddPhotoAsync(editVM.Image);*/
+                var photoResult = user.ProfileImageUrl;
                 MapUserEdit(user, editVM, photoResult);
                 _dashboardRepository.Update(user);
 
