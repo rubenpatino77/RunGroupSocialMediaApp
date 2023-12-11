@@ -16,8 +16,14 @@ namespace RunGroupSocialMedia.Models
         [ForeignKey("Address")]
         public int? AddressId { get; set; }
         public Address? Address { get; set; }
+        [InverseProperty("AppUser")]
         public ICollection<Club> Clubs { get; set; }
         public ICollection<Race> Races { get; set; }
+
+        [InverseProperty("RaceMembers")]
+        public ICollection<Race>? JoinedRaces { get; set; }
+        [InverseProperty("ClubMembers")]
+        public ICollection<Club>? JoinedClubs { get; set; }
     }
 }
 

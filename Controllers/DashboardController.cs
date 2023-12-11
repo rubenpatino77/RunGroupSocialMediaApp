@@ -73,14 +73,14 @@ namespace RunGroupSocialMedia.Controllers
             return View(editMV);
         }
 
-        public void MapUserEdit(AppUser user, EditUserDashboardViewModel editVM, string uploadResult)
+        public void MapUserEdit(AppUser user, EditUserDashboardViewModel editVM, string photoUrl)
         {
             user.Id = editVM.id;
             user.City = editVM.City;
             user.State = editVM.State;
             user.Pace = editVM.Pace;
             user.Mileage = editVM.Mileage;
-            user.ProfileImageUrl = uploadResult;
+            user.ProfileImageUrl = photoUrl;
         }
 
         [HttpPost]
@@ -104,17 +104,8 @@ namespace RunGroupSocialMedia.Controllers
                 return RedirectToAction("Index");
             } else
             {
-                /*try
-                {
-                    await _photoService.DeletePhotoAsync(user.ProfileImageUrl);
-                } catch(Exception ex)
-                {
-                    ModelState.AddModelError("", "Could not delete photo");
-                    return View(editVM);
-                }
-                var photoResult = await _photoService.AddPhotoAsync(editVM.Image);*/
-                var photoResult = user.ProfileImageUrl;
-                MapUserEdit(user, editVM, photoResult);
+                var photoUrl = user.ProfileImageUrl;
+                MapUserEdit(user, editVM, photoUrl);
                 _dashboardRepository.Update(user);
 
                 return RedirectToAction("Index");
@@ -125,7 +116,7 @@ namespace RunGroupSocialMedia.Controllers
 
 
 
-            /*
+            /*FOR AZURE
             if (user == null)
             {
                 return View("Error");

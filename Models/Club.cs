@@ -18,7 +18,11 @@ namespace RunGroupSocialMedia.Models
         public ClubCategory ClubCategory { get; set; }
         [ForeignKey("AppUser")]
         public string? AppUserId { get; set; }
+        [InverseProperty("Clubs")]
         public AppUser? AppUser { get; set; }
+
+        [InverseProperty("JoinedClubs")]
+        public ICollection<AppUser>? ClubMembers{ get; set; }
     }
 }
 

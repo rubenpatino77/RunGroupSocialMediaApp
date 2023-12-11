@@ -24,7 +24,11 @@ namespace RunGroupSocialMedia.Models
         public RaceCategory RaceCategory { get; set; }
         [ForeignKey("AppUser")]
         public string? AppUserId { get; set; }
+        [InverseProperty("Races")]
         public AppUser? AppUser { get; set; }
+
+        [InverseProperty("JoinedRaces")]
+        public ICollection<AppUser>? RaceMembers { get; set; }
     }
 }
 
