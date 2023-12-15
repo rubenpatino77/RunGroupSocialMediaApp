@@ -21,12 +21,14 @@ namespace RunGroupSocialMedia.Controllers
         private readonly IClubRepository _clubRepository;
         private readonly IPhotoService _photoService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
 
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
         {
             _clubRepository = clubRepository;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
         }
 
         // GET: /<controller>/
@@ -158,6 +160,15 @@ namespace RunGroupSocialMedia.Controllers
 
             _clubRepository.Delete(clubDetails);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Join(int clubId)
+        {
+            AppUser user = await _userRepository.GetUserById(_httpContextAccessor.HttpContext.User.GetUserId());
+            Club club = await _clubRepository.GetByIdAsync(clubId);
+            bool work = _clubRepository.AddClubMember(club, user);
+            return View("Detail", club);
         }
     }
 }

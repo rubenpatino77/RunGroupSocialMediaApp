@@ -54,12 +54,12 @@ namespace RunGroupSocialMedia.Services
 
         public async Task<Club> GetByIdAsync(int id)
         {
-            return await _context.Clubs.Include(i => i.Address).FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Clubs.Include(i => i.Address).Include(i => i.ClubMembers).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Club?> GetByIdAsyncNoTracking(int id)
         {
-            return await _context.Clubs.Include(i => i.Address).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Clubs.Include(i => i.Address).Include(i => i.ClubMembers).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<IEnumerable<Club>> GetClubByCity(string city)
@@ -81,6 +81,12 @@ namespace RunGroupSocialMedia.Services
         public bool Update(Club club)
         {
             _context.Update(club);
+            return Save();
+        }
+
+        public bool AddClubMember(Club club, AppUser user)
+        {
+            club.ClubMembers.Add(user);
             return Save();
         }
     }

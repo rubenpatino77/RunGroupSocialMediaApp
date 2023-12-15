@@ -29,5 +29,59 @@
 </section>
 <br />
 
-<section class="px-5">
+<section class="flush-with-above">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover align-items-center table-borderless">
+                    <form method="post" asp-controller="Club" asp-action="Join">
+                        <button type="submit" class="btn btn-outline-success">Join Club</button>
+                        <input type="hidden" name="clubId" value="@Model.Id" />
+                    </form>
+                    <br />
+                    @if (Model.ClubMembers != null && Model.ClubMembers.Count != 0)
+                    {
+                        @foreach (var user in Model.ClubMembers)
+                        {
+                            <tr class="bg-white">
+                                <th scope="row">
+                                    <div class="align-items-center row" width="100%">
+                                        <div class="rounded-pill rounded-5 col">
+                                            <img alt="Image profile avatar" width="15%" src="@user.ProfileImageUrl" class="avatar img-fluid rounded-pill">
+                                        </div>
+                                        <div class="media-body col">
+                                            <span class="h6 mb-0">@user.UserName</span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td>
+                                    <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@user.Id">
+                                        View Profile
+                                    </a>
+                                </td>
+
+                                @{
+                                    var mileage = user.Mileage == null ? "?" : user.Mileage.ToString();
+                                    var pace = user.Pace == null ? "?" : user.Mileage.ToString();
+                                }
+                                <td>@mileage mile at @pace mph</td>
+
+                            </tr>
+                            <tr class="table-divider">
+                                <th></th>
+                                <td></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <h1>This club has no members yet. Be the first to join!</h1>
+                    }
+                </table>
+            </div>
+            <!--end of col-->
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
 </section>
