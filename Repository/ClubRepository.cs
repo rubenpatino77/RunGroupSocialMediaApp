@@ -89,6 +89,12 @@ namespace RunGroupSocialMedia.Services
             club.ClubMembers.Add(user);
             return Save();
         }
+
+        public bool RemoveClubMember(Club club, AppUser user)
+        {
+            club.ClubMembers.Remove(user);
+            return Save();
+        }
     }
 }
 

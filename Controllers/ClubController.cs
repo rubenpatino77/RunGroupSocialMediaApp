@@ -170,6 +170,15 @@ namespace RunGroupSocialMedia.Controllers
             bool work = _clubRepository.AddClubMember(club, user);
             return View("Detail", club);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Leave(int clubId)
+        {
+            AppUser user = await _userRepository.GetUserById(_httpContextAccessor.HttpContext.User.GetUserId());
+            Club club = await _clubRepository.GetByIdAsync(clubId);
+            bool work = _clubRepository.RemoveClubMember(club, user);
+            return View("Detail", club);
+        }
     }
 }
 

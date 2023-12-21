@@ -20,6 +20,7 @@ namespace RunGroupSocialMedia.Interfaces
         bool Add(Club club);
         Club Add(CreateClubViewModel form, string imageUrl);
         bool AddClubMember(Club club, AppUser user);
+        bool RemoveClubMember(Club club, AppUser user);
 
         bool Update(Club club);
 
