@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Models;
+using RunGroupSocialMedia.Repository;
 using RunGroupSocialMedia.Services;
 using RunGroupSocialMedia.ViewModels;
 
@@ -24,12 +25,14 @@ namespace RunGroupSocialMedia.Controllers
         private readonly IRaceRepository _raceRepository;
         private IPhotoService _photoService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
 
-        public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
         {
             _raceRepository = raceRepository;
             _photoService = photoService;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
         }
 
         // GET: /<controller>/
@@ -163,6 +166,24 @@ namespace RunGroupSocialMedia.Controllers
 
             _raceRepository.Delete(raceDetails);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Join(int raceId)
+        {
+            AppUser user = await _userRepository.GetUserById(_httpContextAccessor.HttpContext.User.GetUserId());
+            Race race = await _raceRepository.GetByIdAsync(raceId);
+            bool work = _raceRepository.AddRaceMember(race, user);
+            return View("Detail", race);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Leave(int raceId)
+        {
+            AppUser user = await _userRepository.GetUserById(_httpContextAccessor.HttpContext.User.GetUserId());
+            Race race = await _raceRepository.GetByIdAsync(raceId);
+            bool work = _raceRepository.RemoveRaceMember(race, user);
+            return View("Detail", race);
         }
     }
 }

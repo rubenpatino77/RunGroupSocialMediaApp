@@ -19,6 +19,9 @@ namespace RunGroupSocialMedia.Interfaces
         bool Add(Race race);
         Race Add(CreateRaceViewModel form, string imageUrl);
 
+        bool AddRaceMember(Race race, AppUser user);
+        bool RemoveRaceMember(Race race, AppUser user);
+
         bool Update(Race race);
 
         bool Delete(Race race);

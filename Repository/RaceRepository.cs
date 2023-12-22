@@ -54,12 +54,12 @@ namespace RunGroupSocialMedia.Services
 
         public async Task<Race> GetByIdAsync(int id)
         {
-            return await _context.Races.Include(i => i.Address).FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Races.Include(i => i.Address).Include(i => i.RaceMembers).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Race?> GetByIdAsyncNoTracking(int id)
         {
-            return await _context.Races.Include(i => i.Address).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Races.Include(i => i.Address).Include(i => i.RaceMembers).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<IEnumerable<Race>> GetAllRacesByCity(string city)
@@ -81,6 +81,18 @@ namespace RunGroupSocialMedia.Services
         public bool Update(Race race)
         {
             _context.Update(race);
+            return Save();
+        }
+
+        public bool AddRaceMember(Race race, AppUser user)
+        {
+            race.RaceMembers.Add(user);
+            return Save();
+        }
+
+        public bool RemoveRaceMember(Race race, AppUser user)
+        {
+            race.RaceMembers.Remove(user);
             return Save();
         }
     }

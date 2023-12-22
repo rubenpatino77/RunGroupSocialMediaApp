@@ -33,5 +33,70 @@
 </section>
 <br />
 
-<section class="px-5">
+<section class="flush-with-above">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover align-items-center table-borderless">
+                    @if (Model.RaceMembers != null && Model.RaceMembers.Any(user => user.Id == User.GetUserId()))
+                    {
+                        <form method="post" asp-controller="Race" asp-action="Leave">
+                            <button type="submit" class="btn btn-outline-danger">Leave Race</button>
+                            <input type="hidden" name="raceId" value="@Model.Id" />
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-controller="Race" asp-action="Join">
+                            <button type="submit" class="btn btn-outline-success">Join Race</button>
+                            <input type="hidden" name="raceId" value="@Model.Id" />
+                        </form>
+                    }
+
+                    <br />
+                    @if (Model.RaceMembers != null && Model.RaceMembers.Count != 0)
+                    {
+                        @foreach (var user in Model.RaceMembers)
+                        {
+                            <tr class="bg-white">
+                                <th scope="row">
+                                    <div class="align-items-center row" width="100%">
+                                        <div class="rounded-pill rounded-5 col">
+                                            <img alt="Image profile avatar" width="15%" src="@user.ProfileImageUrl" class="avatar img-fluid rounded-pill">
+                                        </div>
+                                        <div class="media-body col">
+                                            <span class="h6 mb-0">@user.UserName</span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td>
+                                    <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@user.Id">
+                                        View Profile
+                                    </a>
+                                </td>
+
+                                @{
+                                    var mileage = user.Mileage == null ? "?" : user.Mileage.ToString();
+                                    var pace = user.Pace == null ? "?" : user.Mileage.ToString();
+                                }
+                                <td>@mileage mile at @pace mph</td>
+
+                            </tr>
+                            <tr class="table-divider">
+                                <th></th>
+                                <td></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <h1>This race has no members yet. Be the first to join!</h1>
+                    }
+                </table>
+            </div>
+            <!--end of col-->
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
 </section>
