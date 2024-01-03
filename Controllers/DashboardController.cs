@@ -95,7 +95,7 @@ namespace RunGroupSocialMedia.Controllers
 
             var user = await _dashboardRepository.GetByIdNoTracking(editVM.id);
 
-            if(editVM.ProfileImageUrl != null && editVM.ProfileImageUrl != "")
+            if(editVM.Image != null)
             {
                 var photoResult = await _photoService.AddPhotoAsync(editVM.Image);
                 MapUserEdit(user, editVM, photoResult.Url.ToString());
