@@ -10,6 +10,7 @@ using RunGroupSocialMedia.Data;
 using RunGroupSocialMedia.Interfaces;
 using RunGroupSocialMedia.Models;
 using RunGroupSocialMedia.Repository;
+using RunGroupSocialMedia.Services;
 using RunGroupSocialMedia.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,13 +21,19 @@ namespace RunGroupSocialMedia.Controllers
     {
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IPhotoService _photoService;
+        private readonly IUserRepository _userRepository;
+        private readonly IClubRepository _clubRepository;
+        private readonly IRaceRepository _raceRepository;
         private readonly IDashboardRepository _dashboardRepository;
 
-        public DashboardController(IDashboardRepository dashboradRepository, IHttpContextAccessor contextAccessor, IPhotoService photoService)
+        public DashboardController(IDashboardRepository dashboradRepository, IHttpContextAccessor contextAccessor, IPhotoService photoService, IUserRepository userRepository, IClubRepository clubRepository, IRaceRepository raceRepository)
         {
             _dashboardRepository = dashboradRepository;
             _contextAccessor = contextAccessor;
             _photoService = photoService;
+            _userRepository = userRepository;
+            _clubRepository = clubRepository;
+            _raceRepository = raceRepository;
         }
 
         // GET: /<controller>/
@@ -37,6 +44,8 @@ namespace RunGroupSocialMedia.Controllers
             var userRaces = await _dashboardRepository.GetAllUserRaces();
             var userClubs = await _dashboardRepository.GetAllUserClubs();
             string userEmail = _dashboardRepository.GetUserEmail(userId);
+            List<Club> joinedClubs = _dashboardRepository.GetJoinedClubs(user);
+            List<Race> joinedRaces = _dashboardRepository.GetJoinedRaces(user);
             var dashboardViewModel = new DashboardViewModel()
             {
                 Email = userEmail,
@@ -47,6 +56,8 @@ namespace RunGroupSocialMedia.Controllers
                 Mileage = user.Mileage,
                 State = user.State,
                 City = user.City,
+                JoinedClubs = joinedClubs,
+                JoinedRaces = joinedRaces
             };
             return View(dashboardViewModel);
         }
@@ -111,11 +122,6 @@ namespace RunGroupSocialMedia.Controllers
                 return RedirectToAction("Index");
             }
 
-
-
-
-
-
             /*FOR AZURE
             if (user == null)
             {
@@ -153,6 +159,25 @@ namespace RunGroupSocialMedia.Controllers
             await _userManager.UpdateAsync(user);
 
             return RedirectToAction("Detail", "User", new { user.Id });*/
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LeaveClub(int clubId)
+        {
+            AppUser user = await _userRepository.GetUserById(_contextAccessor.HttpContext.User.GetUserId());
+            Club club = await _clubRepository.GetByIdAsync(clubId);
+            bool work = _clubRepository.RemoveClubMember(club, user);
+            bool userRemoveResult = _userRepository.LeaveClub(club, user);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LeaveRace(int raceId)
+        {
+            AppUser user = await _userRepository.GetUserById(_contextAccessor.HttpContext.User.GetUserId());
+            Race race = await _raceRepository.GetByIdAsync(raceId);
+            bool work = _raceRepository.RemoveRaceMember(race, user);
+            return RedirectToAction("Index");
         }
     }
 }

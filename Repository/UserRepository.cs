@@ -59,6 +59,30 @@ namespace RunGroupSocialMedia.Repository
             _context.Update(user);
             return Save();
         }
+
+        public bool JoinClub(Club club, AppUser user)
+        {
+            user.JoinedClubs.Add(club);
+            return Save();
+        }
+
+        public bool LeaveClub(Club club, AppUser user)
+        {
+            user.JoinedClubs.Remove(club);
+            return Save();
+        }
+
+        public bool JoinRace(Race race, AppUser user)
+        {
+            user.JoinedRaces.Add(race);
+            return Save();
+        }
+
+        public bool LeaveRace(Race race, AppUser user)
+        {
+            user.JoinedRaces.Remove(race);
+            return Save();
+        }
     }
 }
 

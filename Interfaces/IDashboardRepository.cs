@@ -18,6 +18,14 @@ namespace RunGroupSocialMedia.Interfaces
         bool Update(AppUser user);
 
         bool Save();
+
+        List<Club> GetJoinedClubs(AppUser user);
+        bool JoinClub(Club club, AppUser user);
+        bool LeaveClub(Club club, AppUser user);
+
+        List<Race> GetJoinedRaces(AppUser user);
+        bool JoinRace(Race race, AppUser user);
+        bool LeaveRace(Race race, AppUser user);
     }
 }
 

@@ -56,6 +56,42 @@ namespace RunGroupSocialMedia.Repository
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+        public List<Club> GetJoinedClubs(AppUser user)
+        {
+            var joinedClubs = _context.Clubs.Where(c => c.ClubMembers.Any(cm => cm.Email == user.Email)).ToList();
+            return joinedClubs;
+        }
+
+        public bool JoinClub(Club club, AppUser user)
+        {
+            user.JoinedClubs.Add(club);
+            return Save();
+        }
+
+        public bool LeaveClub(Club club, AppUser user)
+        {
+            user.JoinedClubs.Remove(club);
+            return Save();
+        }
+
+        public List<Race> GetJoinedRaces(AppUser user)
+        {
+            var joinedRaces = _context.Races.Where(r => r.RaceMembers.Any(rm => rm.Email == user.Email)).ToList();
+            return joinedRaces;
+        }
+
+        public bool JoinRace(Race race, AppUser user)
+        {
+            user.JoinedRaces.Add(race);
+            return Save();
+        }
+
+        public bool LeaveRace(Race race, AppUser user)
+        {
+            user.JoinedRaces.Remove(race);
+            return Save();
+        }
     }
 }
 

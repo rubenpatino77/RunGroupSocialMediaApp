@@ -168,6 +168,7 @@ namespace RunGroupSocialMedia.Controllers
             AppUser user = await _userRepository.GetUserById(_httpContextAccessor.HttpContext.User.GetUserId());
             Club club = await _clubRepository.GetByIdAsync(clubId);
             bool work = _clubRepository.AddClubMember(club, user);
+            bool userAddResult = _userRepository.JoinClub(club, user);
             return View("Detail", club);
         }
 
@@ -177,6 +178,7 @@ namespace RunGroupSocialMedia.Controllers
             AppUser user = await _userRepository.GetUserById(_httpContextAccessor.HttpContext.User.GetUserId());
             Club club = await _clubRepository.GetByIdAsync(clubId);
             bool work = _clubRepository.RemoveClubMember(club, user);
+            bool userRemoveResult = _userRepository.LeaveClub(club, user);
             return View("Detail", club);
         }
     }

@@ -32,7 +32,7 @@
 <div class="album py-5 bg-light">
     <div class="container">
         <br />
-        <h2 class="display-4 fw-normal">Your Clubs</h2>
+        <h2 class="display-4 fw-normal">Your Created Clubs</h2>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             @foreach (var item in Model.Clubs)
             {
@@ -59,7 +59,7 @@
                 </div>
             }
         </div>
-        <h2 class="display-4 fw-normal">Your races</h2>
+        <h2 class="display-4 fw-normal">Your Created Races</h2>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
             @foreach (var item in Model.Races)
@@ -79,6 +79,65 @@
                                         <a asp-controller="Race" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
                                         <a asp-controller="Race" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Delete</a>
                                     }
+                                </div>
+                                <small class="text-muted">@item.RaceCategory</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        <br />
+        <h2 class="display-4 fw-normal">Your Joined Clubs</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            @foreach (var item in Model.JoinedClubs)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <img class="card-img-top" src="@item.Image" width="100%" height="225" alt="Card image cap">
+                        <div class="card-body">
+                            <p class="card-text">@item.Title</p>
+                            <p class="card-text col-12 text-truncate">@item.Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a type="btn btn-success" asp-controller="Club" asp-action="Detail" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-outline-secondary">View</a>
+                                    <form method="post" asp-controller="Dashboard" asp-action="LeaveClub">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Leave Club</button>
+                                        <input type="hidden" name="clubId" value="@item.Id" />
+                                    </form>
+                                </div>
+                                <small class="text-muted">@item.ClubCategory</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <h2 class="display-4 fw-normal">Your Joined Races</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            @foreach (var item in Model.JoinedRaces)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <img class="card-img-top" src="@item.Image" width="100%" height="225" alt="Card image cap">
+                        <div class="card-body">
+                            <p class="card-text">@item.Title</p>
+                            <p class="card-text col-12 text-truncate">@item.Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a type="btn btn-success" asp-controller="Race" asp-action="Detail" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-outline-secondary">View</a>
+                                    <form method="post" asp-controller="Dashboard" asp-action="LeaveRace">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Leave Race</button>
+                                        <input type="hidden" name="raceId" value="@item.Id" />
+                                    </form>
                                 </div>
                                 <small class="text-muted">@item.RaceCategory</small>
                             </div>

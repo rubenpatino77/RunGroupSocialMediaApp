@@ -14,6 +14,12 @@ namespace RunGroupSocialMedia.Interfaces
         bool Save();
         Task<List<Club>> GetAllUserClubsByEmail(string userEmail);
         Task<List<Race>> GetAllUserRacesByEmail(string userEmail);
+
+        bool JoinClub(Club club, AppUser user);
+        bool LeaveClub(Club club, AppUser user);
+
+        bool JoinRace(Race race, AppUser user);
+        bool LeaveRace(Race race, AppUser user);
     }
 }
 
