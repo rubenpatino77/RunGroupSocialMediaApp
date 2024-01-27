@@ -1,0 +1,58 @@
+﻿@model RunGroupSocialMedia.ViewModels.FriendViewModel
+
+
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover align-items-center table-borderless">
+                    <tbody>
+                        <h2 class="display-4 fw-normal">Your Added Friends</h2>
+                        @if (Model.FriendsList.Count > 0)
+                        {
+                            @foreach (var user in Model.FriendsList)
+                            {
+                                <tr class="bg-white">
+                                    <th scope="row">
+                                        <div class="align-items-center row" width="100%">
+                                            <div class="rounded-pill rounded-5 col">
+                                                <img alt="Image profile avatar" width="15%" src="@user.ProfileImageUrl" class="avatar img-fluid rounded-pill">
+                                            </div>
+                                            <div class="media-body col">
+                                                <span class="h6 mb-0">@user.UserName</span>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@user.Id">
+                                            View Profile
+                                        </a>
+                                    </td>
+
+                                    @{
+                                        var mileage = user.Mileage == null ? "?" : user.Mileage.ToString();
+                                        var pace = user.Pace == null ? "?" : user.Pace.ToString();
+                                    }
+                                    <td>@mileage mile at @pace mph</td>
+
+                                </tr>
+                                <tr class="table-divider">
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <h3> No friends have been added yet.</h3>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!--end of col-->
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
+</section>

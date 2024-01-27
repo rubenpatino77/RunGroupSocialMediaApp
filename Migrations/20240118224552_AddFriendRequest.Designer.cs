@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RunGroupSocialMedia.Data;
 
@@ -11,9 +12,11 @@ using RunGroupSocialMedia.Data;
 namespace RunGroupSocialMedia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240118224552_AddFriendRequest")]
+    partial class AddFriendRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,9 +227,6 @@ namespace RunGroupSocialMedia.Migrations
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -289,8 +289,6 @@ namespace RunGroupSocialMedia.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -508,10 +506,6 @@ namespace RunGroupSocialMedia.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("RunGroupSocialMedia.Models.AppUser", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("AppUserId");
-
                     b.Navigation("Address");
                 });
 
@@ -569,8 +563,6 @@ namespace RunGroupSocialMedia.Migrations
             modelBuilder.Entity("RunGroupSocialMedia.Models.AppUser", b =>
                 {
                     b.Navigation("Clubs");
-
-                    b.Navigation("Friends");
 
                     b.Navigation("Races");
 

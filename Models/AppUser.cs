@@ -20,10 +20,19 @@ namespace RunGroupSocialMedia.Models
         public ICollection<Club> Clubs { get; set; }
         public ICollection<Race> Races { get; set; }
 
+        public ICollection<AppUser>? Friends { get; set; }
+
+        [InverseProperty("Sender")]
+        public ICollection<FriendRequest>? SentFriendRequests { get; set; }
+        [InverseProperty("Receiver")]
+        public ICollection<FriendRequest>? ReceivedFriendRequests { get; set; }
+
         [InverseProperty("RaceMembers")]
         public ICollection<Race>? JoinedRaces { get; set; }
         [InverseProperty("ClubMembers")]
         public ICollection<Club>? JoinedClubs { get; set; }
+
+
     }
 }
 

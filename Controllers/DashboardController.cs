@@ -24,9 +24,16 @@ namespace RunGroupSocialMedia.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IClubRepository _clubRepository;
         private readonly IRaceRepository _raceRepository;
+        private readonly IFriendRepository _friendRepository;
         private readonly IDashboardRepository _dashboardRepository;
 
-        public DashboardController(IDashboardRepository dashboradRepository, IHttpContextAccessor contextAccessor, IPhotoService photoService, IUserRepository userRepository, IClubRepository clubRepository, IRaceRepository raceRepository)
+        public DashboardController(IDashboardRepository dashboradRepository,
+                                    IHttpContextAccessor contextAccessor,
+                                    IPhotoService photoService,
+                                    IUserRepository userRepository,
+                                    IClubRepository clubRepository,
+                                    IRaceRepository raceRepository,
+                                    IFriendRepository friendRepository)
         {
             _dashboardRepository = dashboradRepository;
             _contextAccessor = contextAccessor;
@@ -34,6 +41,7 @@ namespace RunGroupSocialMedia.Controllers
             _userRepository = userRepository;
             _clubRepository = clubRepository;
             _raceRepository = raceRepository;
+            _friendRepository = friendRepository;
         }
 
         // GET: /<controller>/
@@ -46,6 +54,7 @@ namespace RunGroupSocialMedia.Controllers
             string userEmail = _dashboardRepository.GetUserEmail(userId);
             List<Club> joinedClubs = _dashboardRepository.GetJoinedClubs(user);
             List<Race> joinedRaces = _dashboardRepository.GetJoinedRaces(user);
+            List<AppUser> friends = _friendRepository.GetUsersFriends(user);
             var dashboardViewModel = new DashboardViewModel()
             {
                 Email = userEmail,
@@ -57,7 +66,8 @@ namespace RunGroupSocialMedia.Controllers
                 State = user.State,
                 City = user.City,
                 JoinedClubs = joinedClubs,
-                JoinedRaces = joinedRaces
+                JoinedRaces = joinedRaces,
+                Friends = friends
             };
             return View(dashboardViewModel);
         }
