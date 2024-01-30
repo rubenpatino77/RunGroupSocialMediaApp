@@ -34,6 +34,18 @@ namespace RunGroupSocialMedia.Controllers
             };
             return View(viewModel);
         }
+
+        public IActionResult FriendRequest()
+        {
+            var user = _friendRepository.GetUserById(_contextAccessor.HttpContext.User.GetUserId());
+            var friendRequests = _friendRepository.GetUsersRecievedFriendRequests(user.Result);
+            FriendRequestViewModel requests = new FriendRequestViewModel
+            {
+                FriendRequests = friendRequests.ToList()
+            };
+
+            return View(requests);
+        }
     }
 }
 

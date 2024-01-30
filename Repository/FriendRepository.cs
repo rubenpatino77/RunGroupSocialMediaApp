@@ -38,7 +38,15 @@ namespace RunGroupSocialMedia.Repository
 		public ICollection<FriendRequest> GetUsersRecievedFriendRequests(AppUser user)
 		{
 
-			ICollection<FriendRequest> requests = user.ReceivedFriendRequests.ToList();
+			ICollection<FriendRequest> requests = user.ReceivedFriendRequests;
+
+			if(requests == null)
+			{
+				requests = new List<FriendRequest>();
+			} else
+			{
+				requests = requests.ToList();
+			}
 
 			return requests;
 		}

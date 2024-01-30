@@ -1,42 +1,36 @@
-﻿@model RunGroupSocialMedia.ViewModels.FriendViewModel
+﻿@model RunGroupSocialMedia.ViewModels.FriendRequestViewModel
 
-<div class="container">
-    <div class="row align-items-center justify-content-between">
-        <h2 class="display-4 fw-normal col-4">Your Friends </h2>
-        <a class="btn col-2 btn-outline-primary" asp-action="FriendRequest" asp-controller="Friend">Friend Requests</a>
-    </div>
-</div>
 
-<section class="py-5 bg-light">
+<section class="flush-with-above">
     <div class="container">
         <div class="row">
             <div class="col">
                 <table class="table table-hover align-items-center table-borderless">
                     <tbody>
-                        @if (Model.FriendsList.Count > 0)
-                        {
-                            @foreach (var user in Model.FriendsList)
-                            {
-                                <tr>
+                        @if (Model.FriendRequests.Count() > 0)
+                         {
+                            @foreach (var request in Model.FriendRequests)
+                                {
+                                <tr class="bg-white">
                                     <th scope="row">
                                         <div class="align-items-center row" width="100%">
                                             <div class="rounded-pill rounded-5 col">
-                                                <img alt="Image profile avatar" width="15%" src="@user.ProfileImageUrl" class="avatar img-fluid rounded-pill">
+                                                <img alt="Image profile avatar" width="15%" src="@request.Sender.ProfileImageUrl" class="avatar img-fluid rounded-pill">
                                             </div>
                                             <div class="media-body col">
-                                                <span class="h6 mb-0">@user.UserName</span>
+                                                <span class="h6 mb-0">@request.Sender.UserName</span>
                                             </div>
                                         </div>
                                     </th>
                                     <td>
-                                        <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@user.Id">
+                                        <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@request.Sender.Id">
                                             View Profile
                                         </a>
                                     </td>
 
                                     @{
-                                        var mileage = user.Mileage == null ? "?" : user.Mileage.ToString();
-                                        var pace = user.Pace == null ? "?" : user.Pace.ToString();
+                                        var mileage = request.Sender.Mileage == null ? "?" : request.Sender.Mileage.ToString();
+                                        var pace = request.Sender.Pace == null ? "?" : request.Sender.Pace.ToString();
                                     }
                                     <td>@mileage mile at @pace mph</td>
 
@@ -45,12 +39,11 @@
                                     <th></th>
                                     <td></td>
                                 </tr>
-                            }
-                        }
-                        else
-                        {
-                            <h3> No friends have been added yet.</h3>
-                        }
+                             }
+                         } else
+                         {
+                             <h1>No Friend Requests</h1>
+                         }
                     </tbody>
                 </table>
             </div>
