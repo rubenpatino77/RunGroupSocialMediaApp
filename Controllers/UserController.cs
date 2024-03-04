@@ -17,11 +17,13 @@ namespace RunGroupSocialMedia.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IFriendRepository _friendRepository;
 
-        public UserController(IUserRepository userRepository, UserManager<AppUser> userManager)
+        public UserController(IUserRepository userRepository, UserManager<AppUser> userManager, IFriendRepository friendRepository)
         {
             _userRepository = userRepository;
             _userManager = userManager;
+            _friendRepository = friendRepository;
         }
 
         [HttpGet("users")]
@@ -50,17 +52,18 @@ namespace RunGroupSocialMedia.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(string id)
         {
-            var user = await _userRepository.GetUserById(id);
+            //var user = await _userRepository.GetUserById(id);
+            AppUser user = await _friendRepository.GetUserByIdIncludeRecievedRequests(id);
             if (user == null)
             {
                 return RedirectToAction("Index", "Users");
             }
             var userRaces = await _userRepository.GetAllUserRacesByEmail(user.Email);
             var userClubs = await _userRepository.GetAllUserClubsByEmail(user.Email);
-            //var userName = await _userRepository.
+            bool isFriend = _friendRepository.IsFriend(user.Id);
             var userDetailViewModel = new UserDetailViewModel()
             {
-                Id = user.Id,
+                Id = id,
                 Pace = user.Pace,
                 City = user.City,
                 State = user.State,
@@ -68,10 +71,29 @@ namespace RunGroupSocialMedia.Controllers
                 UserName = user.UserName,
                 ProfileImageUrl = user.ProfileImageUrl,
                 Races = userRaces,
-                Clubs = userClubs
+                Clubs = userClubs,
+                IsFriend = isFriend
             };
             return View(userDetailViewModel);
         }
+
+        [HttpPost]
+        public IActionResult SendFriendRequest(string id)
+        {
+            _friendRepository.SendFriendRequest(id);
+
+            return RedirectToAction("Detail", new { id });
+        }
+
+        [HttpPost]
+        public IActionResult RemoveFriend(string usersId)
+        {
+            _friendRepository.RemoveFriend(usersId);
+
+            return RedirectToAction("Detail", usersId);
+        }
+
+        //todo check if addfriend works and create removefriend
     }
 }
 

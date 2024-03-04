@@ -35,10 +35,11 @@ namespace RunGroupSocialMedia.Controllers
             return View(viewModel);
         }
 
-        public IActionResult FriendRequest()
+        public async Task<IActionResult> FriendRequestAsync()
         {
-            var user = _friendRepository.GetUserById(_contextAccessor.HttpContext.User.GetUserId());
-            var friendRequests = _friendRepository.GetUsersRecievedFriendRequests(user.Result);
+            var user = await _friendRepository.GetUserByIdIncludeRecievedRequests(_contextAccessor.HttpContext.User.GetUserId());
+            //var friendRequests = _friendRepository.GetUsersRecievedFriendRequests(user.Result);
+            var friendRequests = user.ReceivedFriendRequests;
             FriendRequestViewModel requests = new FriendRequestViewModel
             {
                 FriendRequests = friendRequests.ToList()

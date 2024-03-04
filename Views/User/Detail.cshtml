@@ -22,6 +22,22 @@
                         descrption here.
                     </article>-->
                 </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (Model.IsFriend == true)
+                        {
+                            <a class="btn btn-danger" asp-controller="User" asp-action="">Remove Friend</a>
+                        }
+                        else
+                        {
+                            <form id="addFriendForm" asp-controller="User" asp-action="SendFriendRequest" asp-route-id="@Model.Id" method="post">
+                                <button type="submit" class="btn btn-success">Add Friend</button>
+                            </form>
+                        }
+                    }
+
+                </div>
                 <!--end of col-->
             </div>
             <!--end of row-->

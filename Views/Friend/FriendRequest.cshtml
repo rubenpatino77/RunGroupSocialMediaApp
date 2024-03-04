@@ -20,8 +20,6 @@
                                             <div class="media-body col">
                                                 <span class="h6 mb-0">@request.Sender.UserName</span>
                                             </div>
-                                        </div>
-                                    </th>
                                     <td>
                                         <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@request.Sender.Id">
                                             View Profile
@@ -33,6 +31,16 @@
                                         var pace = request.Sender.Pace == null ? "?" : request.Sender.Pace.ToString();
                                     }
                                     <td>@mileage mile at @pace mph</td>
+</div>
+                                    </th>
+            <td>
+                <a class="btn btn-outline-primary" asp-controller="Friend" asp-action="AcceptFriendRequest" asp-route-id="@request.Sender.Id">
+                    Accept
+                </a>
+                <a class="btn btn-outline-primary" asp-controller="Friend" asp-action="DeclineFriendRequest" asp-route-id="@request.Sender.Id">
+                    Decline
+                </a>
+            </td>
 
                                 </tr>
                                 <tr class="table-divider">

@@ -14,6 +14,8 @@ namespace RunGroupSocialMedia.ViewModels
         public string ProfileImageUrl { get; set; }
         public List<Race> Races { get; set; }
         public List<Club> Clubs { get; set; }
+
+        public bool IsFriend { get; set; }
     }
 }
 
